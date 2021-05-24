@@ -83,13 +83,35 @@ public class Deck : MonoBehaviour
 
     void StartGame()
     {
+        finalMessage.text = "";
         for (int i = 0; i < 2; i++)
         {
             PushPlayer();
             PushDealer();
+
+            
             /*TODO:
              * Si alguno de los dos obtiene Blackjack, termina el juego y mostramos mensaje
              */
+        }
+
+        if (values[0] + values[2] == 21)
+        {
+            
+            hitButton.interactable = false;
+            stickButton.interactable = false;
+            finalMessage.text = "Player wins";
+            
+
+        }
+        if (values[1] + values[3] == 21)
+        {
+            dealer.GetComponent<CardHand>().cards[0].GetComponent<CardModel>().ToggleFace(true);
+            hitButton.interactable = false;
+            stickButton.interactable = false;
+            finalMessage.text = "Dealer wins";
+            
+
         }
     }
 
