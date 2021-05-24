@@ -64,11 +64,21 @@ public class Deck : MonoBehaviour
 
     private void ShuffleCards()
     {
-        /*TODO:
-         * Barajar las cartas aleatoriamente.
-         * El método Random.Range(0,n), devuelve un valor entre 0 y n-1
-         * Si lo necesitas, puedes definir nuevos arrays.
-         */       
+         string[] list_name = new string[52];
+        int name_card = 0;
+        int aux = 0;
+        Sprite aux_spr;
+        for(int i = 0; i <= 51; i++)
+        {
+            int random = Random.Range(0, 51);
+            aux = values[i];
+            aux_spr = faces[i];
+            values[i] = values[random];
+            faces[i] = faces[random];
+            values[random] = aux;
+            faces[random] = aux_spr;
+
+        }     
     }
 
     void StartGame()
