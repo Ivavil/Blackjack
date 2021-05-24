@@ -11,9 +11,13 @@ public class Deck : MonoBehaviour
     public Button playAgainButton;
     public Text finalMessage;
     public Text probMessage;
+    public Text bankMessage;
+    public Button betButton;
 
     public int[] values = new int[52];
     int cardIndex = 0;    
+    int actualBet = 10;
+    int bank = 1000;
        
     private void Awake()
     {    
@@ -24,7 +28,8 @@ public class Deck : MonoBehaviour
     private void Start()
     {
         ShuffleCards();
-        StartGame();        
+        StartGame();     
+        bankMessage.text = bank.ToString() + "$";
     }
 
     private void InitCardValues()
@@ -83,6 +88,7 @@ public class Deck : MonoBehaviour
 
     void StartGame()
     {
+        actualBet = 10;
         finalMessage.text = "";
         for (int i = 0; i < 2; i++)
         {
@@ -101,7 +107,8 @@ public class Deck : MonoBehaviour
             hitButton.interactable = false;
             stickButton.interactable = false;
             finalMessage.text = "Player wins";
-            
+            bankMessage.text = (bank + actualBet).ToString() + "$";
+            bank = bank + actualBet;
 
         }
         if (values[1] + values[3] == 21)
@@ -110,7 +117,8 @@ public class Deck : MonoBehaviour
             hitButton.interactable = false;
             stickButton.interactable = false;
             finalMessage.text = "Dealer wins";
-            
+             bankMessage.text = (bank - actualBet).ToString() + "$";
+            bank = bank - actualBet;
 
         }
     }
@@ -193,7 +201,8 @@ public class Deck : MonoBehaviour
             hitButton.interactable = false;
             stickButton.interactable = false;
             finalMessage.text = "Dealer wins";
-            
+            bankMessage.text = (bank - actualBet).ToString() + "$";
+            bank = bank - actualBet;
         }     
 
     }
@@ -221,14 +230,16 @@ public class Deck : MonoBehaviour
             hitButton.interactable = false;
             stickButton.interactable = false;
             finalMessage.text = "Player wins";
-            
+            bankMessage.text = (bank + actualBet).ToString() + "$";
+            bank = bank + actualBet;
         }
         if (dealer.GetComponent<CardHand>().points > player.GetComponent<CardHand>().points && dealer.GetComponent<CardHand>().points <= 21)
         {
             hitButton.interactable = false;
             stickButton.interactable = false;
             finalMessage.text = "Dealer wins";
-            
+             bankMessage.text = (bank - actualBet).ToString() + "$";
+            bank = bank - actualBet;
         }
         if (dealer.GetComponent<CardHand>().points == player.GetComponent<CardHand>().points && dealer.GetComponent<CardHand>().points <= 21)
         {
@@ -249,6 +260,11 @@ public class Deck : MonoBehaviour
         cardIndex = 0;
         ShuffleCards();
         StartGame();
+    }
+    
+    public void Bet()
+    {
+        actualBet = actualBet + 10;
     }
     
 }
