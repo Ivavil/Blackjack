@@ -180,13 +180,21 @@ public class Deck : MonoBehaviour
         /*TODO: 
          * Si estamos en la mano inicial, debemos voltear la primera carta del dealer.
          */
-        
+        dealer.GetComponent<CardHand>().cards[0].GetComponent<CardModel>().ToggleFace(true);
+
         //Repartimos carta al jugador
         PushPlayer();
 
         /*TODO:
          * Comprobamos si el jugador ya ha perdido y mostramos mensaje
-         */      
+         */
+        if (player.GetComponent<CardHand>().points > 21)
+        {
+            hitButton.interactable = false;
+            stickButton.interactable = false;
+            finalMessage.text = "Dealer wins";
+            
+        }     
 
     }
 
