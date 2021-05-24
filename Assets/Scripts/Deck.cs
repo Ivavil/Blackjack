@@ -29,11 +29,37 @@ public class Deck : MonoBehaviour
 
     private void InitCardValues()
     {
-        /*TODO:
-         * Asignar un valor a cada una de las 52 cartas del atributo "values".
-         * En principio, la posición de cada valor se deberá corresponder con la posición de faces. 
-         * Por ejemplo, si en faces[1] hay un 2 de corazones, en values[1] debería haber un 2.
-         */
+        string[] list_name = new string[52];
+        int name_card = 0;
+        for(int i = 0; i<= values.Length - 1; i++)
+        {
+            list_name[i] = faces[i].name;
+            
+            int startPosition = list_name[i].IndexOf("_") + 1;
+           
+            name_card = int.Parse(list_name[i].Substring(startPosition));
+            if(name_card >= 0 && name_card <= 12)
+            {
+                values[i] = name_card + 1;
+            } else if (name_card >= 13 && name_card <= 25)
+            {
+                values[i] = name_card - 13 + 1;
+            } else if (name_card >= 26 && name_card <= 38)
+            {
+                values[i] = name_card - 26 + 1;
+            } else if(name_card >= 39 && name_card <= 51)
+            {
+                values[i] = name_card - 39 + 1;
+            } if(name_card == 10 || name_card == 11 || name_card == 12 || name_card == 23 || name_card == 24 || name_card == 25 || name_card == 36 || name_card == 37 || name_card == 38 || name_card == 49 || name_card == 50 || name_card == 51)
+            {
+                values[i] = 10;
+            } if(name_card == 0 || name_card == 13 || name_card == 26 || name_card == 39)
+            {
+                values[i] = 11;
+            }
+
+            //Debug.Log(values[i]);
+        }
     }
 
     private void ShuffleCards()
