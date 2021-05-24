@@ -117,12 +117,43 @@ public class Deck : MonoBehaviour
 
     private void CalculateProbabilities()
     {
-        /*TODO:
-         * Calcular las probabilidades de:
-         * - Teniendo la carta oculta, probabilidad de que el dealer tenga más puntuación que el jugador
-         * - Probabilidad de que el jugador obtenga entre un 17 y un 21 si pide una carta
-         * - Probabilidad de que el jugador obtenga más de 21 si pide una carta          
-         */
+         int b_card = 0;
+        int c_card = 0;
+        int d_card = 0;
+
+        for (int i = 4; i <= 51; i++){
+            if(values[i] > (values[0] + values[2] - values[3]))
+            {
+                b_card++;
+            }
+        }
+
+        for (int i = 4; i <= 51; i++)
+        {
+            if ((player.GetComponent<CardHand>().points + values[i]) >= 17 && (player.GetComponent<CardHand>().points + values[i]) <= 21)
+            {
+                c_card++;
+            }
+        }
+
+        for (int i = 4; i <= 51; i++)
+        {
+            if ((player.GetComponent<CardHand>().points + values[i]) > 21)
+            {
+                d_card++;
+            }
+        }
+
+        double probab = (float)b_card / 48;
+        double probab2 = (float)c_card / 48;
+        double probab3 = (float)d_card / 48;
+
+        int probab_1 = (int)(probab * 100);
+        int probab_2 = (int)(probab2 * 100);
+        int probab_3 = (int)(probab3 * 100);
+
+        probMessage.text = probab_1.ToString() + "%" + " - " + probab_2.ToString() + "%"+ " - " + probab_3.ToString() + "%";
+        
     }
 
     void PushDealer()
