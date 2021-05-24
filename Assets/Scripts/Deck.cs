@@ -62,8 +62,6 @@ public class Deck : MonoBehaviour
             {
                 values[i] = 11;
             }
-
-            //Debug.Log(values[i]);
         }
     }
 
@@ -88,38 +86,40 @@ public class Deck : MonoBehaviour
 
     void StartGame()
     {
-        actualBet = 10;
-        finalMessage.text = "";
-        for (int i = 0; i < 2; i++)
-        {
-            PushPlayer();
-            PushDealer();
+        if (bank >= 10){
+            actualBet = 10;
+            finalMessage.text = "";
+            for (int i = 0; i < 2; i++)
+            {
+                PushPlayer();
+                PushDealer();
+            }
 
-            
-            /*TODO:
-             * Si alguno de los dos obtiene Blackjack, termina el juego y mostramos mensaje
-             */
+            if (values[0] + values[2] == 21)
+            {
+
+                hitButton.interactable = false;
+                stickButton.interactable = false;
+                finalMessage.text = "Player wins";
+                bankMessage.text = (bank + actualBet).ToString() + "$";
+                bank = bank + actualBet;
+
+            }
+            if (values[1] + values[3] == 21)
+            {
+                dealer.GetComponent<CardHand>().cards[0].GetComponent<CardModel>().ToggleFace(true);
+                hitButton.interactable = false;
+                stickButton.interactable = false;
+                finalMessage.text = "Dealer wins";
+                 bankMessage.text = (bank - actualBet).ToString() + "$";
+                bank = bank - actualBet;
+
+            } 
         }
-
-        if (values[0] + values[2] == 21)
-        {
-            
+        else {
             hitButton.interactable = false;
             stickButton.interactable = false;
-            finalMessage.text = "Player wins";
-            bankMessage.text = (bank + actualBet).ToString() + "$";
-            bank = bank + actualBet;
-
-        }
-        if (values[1] + values[3] == 21)
-        {
-            dealer.GetComponent<CardHand>().cards[0].GetComponent<CardModel>().ToggleFace(true);
-            hitButton.interactable = false;
-            stickButton.interactable = false;
-            finalMessage.text = "Dealer wins";
-             bankMessage.text = (bank - actualBet).ToString() + "$";
-            bank = bank - actualBet;
-
+            finalMessage.text = "Not enough money to play";
         }
     }
 
@@ -166,18 +166,12 @@ public class Deck : MonoBehaviour
 
     void PushDealer()
     {
-        /*TODO:
-         * Dependiendo de cómo se implemente ShuffleCards, es posible que haya que cambiar el índice.
-         */
         dealer.GetComponent<CardHand>().Push(faces[cardIndex],values[cardIndex]);
         cardIndex++;        
     }
 
     void PushPlayer()
     {
-        /*TODO:
-         * Dependiendo de cómo se implemente ShuffleCards, es posible que haya que cambiar el índice.
-         */
         player.GetComponent<CardHand>().Push(faces[cardIndex], values[cardIndex]/*,cardCopy*/);
         cardIndex++;
         CalculateProbabilities();
@@ -185,17 +179,8 @@ public class Deck : MonoBehaviour
 
     public void Hit()
     {
-        /*TODO: 
-         * Si estamos en la mano inicial, debemos voltear la primera carta del dealer.
-         */
         dealer.GetComponent<CardHand>().cards[0].GetComponent<CardModel>().ToggleFace(true);
-
-        //Repartimos carta al jugador
         PushPlayer();
-
-        /*TODO:
-         * Comprobamos si el jugador ya ha perdido y mostramos mensaje
-         */
         if (player.GetComponent<CardHand>().points > 21)
         {
             hitButton.interactable = false;
@@ -209,18 +194,9 @@ public class Deck : MonoBehaviour
 
     public void Stand()
     {
-        /*TODO: 
-         * Si estamos en la mano inicial, debemos voltear la primera carta del dealer.
-         */
         dealer.GetComponent<CardHand>().cards[0].GetComponent<CardModel>().ToggleFace(true);
         hitButton.interactable = false;
         stickButton.interactable = false;
-
-        /*TODO:
-         * Repartimos cartas al dealer si tiene 16 puntos o menos
-         * El dealer se planta al obtener 17 puntos o más
-         * Mostramos el mensaje del que ha ganado
-         */
         if (dealer.GetComponent<CardHand>().points <= 16)
         {
             PushDealer();
@@ -264,7 +240,15 @@ public class Deck : MonoBehaviour
     
     public void Bet()
     {
-        actualBet = actualBet + 10;
+        if((actualBet + 10) <= bank)
+        {
+            actualBet = actualBet + 10;
+        } else
+        {
+            hitButton.interactable = false;
+            stickButton.interactable = false;
+            finalMessage.text = "Not enough money to bet";
+        }
     }
     
 }
